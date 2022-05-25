@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>ChatCord App</title>
+</head>
+
+<body>
+    <%= sender %>
+        <div class="chat-container">
+            <header class="chat-header">
+                <h1> Chat Room</h1>
+                <a href="/" class="btn">Leave Room</a>
+            </header>
+            <main class="chat-main">
+                <div class="chat-sidebar">
+                    <h3><i class="fas fa-comments"></i> Room Name:</h3>
+                    <h2 id="room-name">TTRD</h2>
+                    <h3><i class="fas fa-users"></i> Users</h3>
+                    <ul id="users">
+                        <% for (let i=0; i < user.length; i++) { %>
+                            <li>
+                                <span>
+                                    <%= user[i].username %>
+                                </span>
+                                <% if (user[i].isOnline) { %>
+                                    <i class="fa-solid fa-circle online"></i>
+                                    <% } else { %>
+                                        <i class="fa-solid fa-circle offline"></i>
+                                        <% } %>
+                            </li>
+                            <% } %>
+                    </ul>
+                </div>
+                <div class="chat-messages">
+                    <% for (let i=0; i < chatMessage.length; i++ ) { %>
+                        <% if (sender===chatMessage[i].sender ) { %>
+                            <div class="message-container">
+                                <div class="message">
+                                    <p class="meta">
+                                        <%= chatMessage[i].sender %>
+                                            <span>
+                                                <% let date=chatMessage[i].timeStamp; let time=date.getHours() + ":" +
+                                                    date.getMinutes() %>
+                                                    <%= time %>
+                                            </span>
+                                    </p>
+                                    <p class="text">
+                                        <%= chatMessage[i].message %>
+                                    </p>
+                                </div>
+                                <br>
+                            </div>
+                            <% } else { %>
+                                <div class="message-container left">
+                                    <div class="message">
+                                        <p class="meta">
+                                            <%= chatMessage[i].sender %>
+                                                <span>
+                                                    <% let date=chatMessage[i].timeStamp; let time=date.getHours() + ":"
+                                                        + date.getMinutes() %>
+                                                        <%= time %>
+                                                </span>
+                                        </p>
+                                        <p class="text">
+                                            <%= chatMessage[i].message %>
+                                        </p>
+                                    </div>
+                                    <br>
+                                </div>
+                                <% } %>
+                                    <% } %>
+                </div>
+            </main>
+            <div class="chat-form-container">
+                <form id="chat-form">
+                    <input type="hidden" name="sender" value="<%= sender %>" id="sender">
+                    <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" name="msg" />
+                    <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+                </form>
+            </div>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/main.js"></script>
+</body>
+
+</html>
